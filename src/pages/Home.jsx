@@ -61,7 +61,7 @@ const Home = () => {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img
-            src="https://i.pinimg.com/736x/6d/63/36/6d6336b9272628212eae8f73ae1546a9.jpg"
+            src="https://i.pinimg.com/736x/fb/b1/33/fbb133878028cf134b0f7c146fa7ba36.jpg"
             alt="Shopping Background"
             className="w-full h-full object-cover animate-pan-slow" // Assume 'animate-pan-slow' might be a custom class or just placeholder for subtle zoom
           />
