@@ -1,6 +1,6 @@
 import React, { useMemo, useContext, useState, useRef, useEffect } from 'react';
 import { useData } from '../context/DataContext';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
   ShoppingBag,
@@ -30,7 +30,7 @@ import { format, subMonths, isSameMonth } from 'date-fns';
 
 const UserDashboard = () => {
   const { orders, customers, loading } = useData();
-  const { user: authUser } = useContext(AuthContext);
+  const { user: authUser } = useAuth();
   const [showProfileForm, setShowProfileForm] = useState(false);
   const navigate = useNavigate();
 
