@@ -1,30 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
-import { Menu, X, ShoppingBag } from 'lucide-react';
-import SearchInput from "./SearchInput";
-import { useCart } from "../../context/CartContext";
-import CartDrawer from "./CartDrawer";
+import React, { useState } from 'react';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import {
+  ShoppingBag,
+  Search,
+  Menu,
+  X,
+  User,
+  LogOut,
+  ChevronDown
+} from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import SearchInput from './SearchInput';
+import './Navbar.css';
 
 const Navbar = () => {
-  const [isAuth, setIsAuth] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { user, logout } = useAuth();
+  const { cart } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // Consume Cart Context
-  const { cartCount, toggleCart } = useCart();
-
-  useEffect(() => {
-    setIsAuth(localStorage.getItem("isAuthenticated") === "true");
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    setIsAuth(false);
-    navigate("/");
-    setIsOpen(false);
-  };
-
-  const closeMenu = () => setIsOpen(false);
+  // Calculate cart item count
+  const cartCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -33,148 +31,154 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" },
   ];
 
+  const isActiveLink = (path) => {
+    return location.pathname === path;
+  };
+
   return (
-    <>
-      <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/60 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
+    <nav className="bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-600 sticky top-0 z-50 shadow-lg transition-all duration-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-20 gap-4">
 
-            {/* Logo */}
-            <div className="flex-shrink-0 flex items-center gap-12">
-              <Link to="/" className="flex items-center gap-2.5 group" onClick={closeMenu}>
-                <div className="bg-gradient-to-tr from-blue-600 to-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform duration-300">
-                  <ShoppingBag size={22} className="stroke-[2.5]" />
-                </div>
-                <span className="font-bold text-xl tracking-tight text-slate-800 group-hover:text-blue-600 transition-colors">
-                  Vajra<span className="text-slate-500 font-medium">Retails</span>
-                </span>
-              </Link>
+          {/* Left: Logo */}
+          <div className="flex-shrink-0 flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
+            <div className="bg-white/10 p-2 rounded-xl backdrop-blur-sm group-hover:bg-white/20 transition-colors">
+              <span className="text-white font-bold text-xl tracking-tighter">VR</span>
             </div>
-
-            {/* Center: Search Bar (Desktop) */}
-            <div className="hidden lg:flex flex-1 max-w-lg mx-8">
-              <SearchInput />
-            </div>
-
-
-            {/* Right Section: Links + Cart + Auth */}
-            <div className="flex items-center gap-6">
-
-              {/* Desktop Menu Links */}
-              <div className="hidden md:flex items-center space-x-1">
-                {navLinks.map((link) => (
-                  <NavLink
-                    key={link.path}
-                    to={link.path}
-                    className={({ isActive }) =>
-                      `px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${isActive
-                        ? "text-blue-600 bg-blue-50"
-                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                      }`
-                    }
-                  >
-                    {link.name}
-                  </NavLink>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-3 pl-3 lg:border-l border-slate-200">
-
-                {/* Cart Button */}
-                <button
-                  onClick={toggleCart}
-                  className="relative p-2.5 hover:bg-slate-100 rounded-full transition-colors group"
-                  aria-label="Open Cart"
-                >
-                  <ShoppingBag size={22} className="text-slate-600 group-hover:text-blue-600 transition-colors" />
-                  {cartCount > 0 && (
-                    <span className="absolute top-1 right-0.5 min-w-[18px] h-[18px] bg-red-500 text-white text-[10px] font-bold flex items-center justify-center rounded-full ring-2 ring-white animate-in zoom-in duration-300">
-                      {cartCount}
-                    </span>
-                  )}
-                </button>
-
-                {/* Auth Buttons */}
-                <div className="hidden sm:flex items-center gap-2">
-                  {!isAuth ? (
-                    <>
-                      <Link
-                        to="/login"
-                        className="text-slate-700 hover:text-blue-600 font-semibold text-sm px-4 py-2 transition-colors"
-                      >
-                        Log In
-                      </Link>
-                      <Link
-                        to="/signup"
-                        className="bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-md shadow-blue-200 hover:bg-blue-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5"
-                      >
-                        Sign Up
-                      </Link>
-                    </>
-                  ) : (
-                    <button
-                      onClick={handleLogout}
-                      className="text-rose-600 bg-rose-50 hover:bg-rose-100 px-4 py-2 rounded-full text-sm font-medium transition-colors"
-                    >
-                      Log Out
-                    </button>
-                  )}
-                </div>
-
-                {/* Mobile menu button */}
-                <div className="flex items-center md:hidden ml-2">
-                  <button
-                    onClick={() => setIsOpen(!isOpen)}
-                    className="text-slate-600 hover:text-slate-900 p-2 hover:bg-slate-100 rounded-lg transition-colors"
-                  >
-                    {isOpen ? <X size={24} /> : <Menu size={24} />}
-                  </button>
-                </div>
-              </div>
-            </div>
+            <span className="text-2xl font-bold text-white tracking-tight group-hover:opacity-90 transition-opacity hidden sm:block">
+              Vajra Retails
+            </span>
           </div>
-        </div>
 
-        {/* Mobile Menu */}
-        {isOpen && (
-          <div className="md:hidden bg-white border-b border-slate-100 absolute w-full shadow-xl animate-in slide-in-from-top-2">
-
-            <div className="p-4 border-b border-slate-100">
-              <SearchInput />
-            </div>
-
-            <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          {/* Center: Search & Nav (Desktop) */}
+          <div className="hidden lg:flex flex-1 items-center justify-center gap-8 max-w-4xl">
+            {/* Links */}
+            <div className="flex items-center space-x-1">
               {navLinks.map((link) => (
                 <NavLink
-                  key={link.path}
+                  key={link.name}
                   to={link.path}
-                  onClick={closeMenu}
                   className={({ isActive }) =>
-                    `block px-4 py-3 rounded-xl text-base font-medium ${isActive
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    `px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${isActive
+                      ? 'bg-white/20 text-white shadow-sm backdrop-blur-sm'
+                      : 'text-blue-50 hover:bg-white/10 hover:text-white'
                     }`
                   }
                 >
                   {link.name}
                 </NavLink>
               ))}
-              <div className="border-t border-slate-100 mt-4 pt-4 px-3 flex flex-col gap-3">
-                {!isAuth ? (
-                  <>
-                    <Link to="/login" onClick={closeMenu} className="w-full text-center py-2.5 font-medium text-slate-700 hover:bg-slate-50 rounded-xl transition-colors">Log In</Link>
-                    <Link to="/signup" onClick={closeMenu} className="w-full text-center py-2.5 bg-slate-900 text-white font-medium rounded-xl hover:bg-slate-800 transition-colors">Sign Up</Link>
-                  </>
-                ) : (
-                  <button onClick={handleLogout} className="w-full text-center py-2.5 bg-rose-50 text-rose-600 font-medium rounded-xl">Log Out</button>
-                )}
+            </div>
+
+            {/* Large Search Bar */}
+            <div className="flex-1 max-w-md relative group">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-slate-400" />
               </div>
+              <input
+                type="text"
+                placeholder="Search products, brands, categories..."
+                className="block w-full pl-10 pr-4 py-2.5 rounded-full border-0 bg-white text-slate-900 placeholder-slate-400 focus:ring-2 focus:ring-white/50 focus:outline-none shadow-sm transition-shadow group-hover:shadow-md"
+              />
             </div>
           </div>
-        )}
-      </nav>
-      <CartDrawer />
-    </>
+
+          {/* Right: Cart & Auth */}
+          <div className="flex items-center gap-4">
+            {/* Mobile Search Toggle (Visible only on small screens) */}
+            <button className="lg:hidden p-2 text-white/80 hover:text-white">
+              <Search className="h-6 w-6" />
+            </button>
+
+            {/* Cart */}
+            <button
+              onClick={() => navigate('/cart')} // Assuming you have a cart route or drawer trigger
+              className="relative p-2 text-blue-50 hover:text-white transition-colors group"
+            >
+              <ShoppingBag className="h-6 w-6 group-hover:scale-105 transition-transform" />
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-blue-600 transform translate-x-1/4 -translate-y-1/4 bg-white rounded-full shadow-sm">
+                  {cartCount}
+                </span>
+              )}
+            </button>
+
+            {/* Auth Buttons (Desktop) */}
+            <div className="hidden md:flex items-center gap-3">
+              {!user ? (
+                <>
+                  <button
+                    onClick={() => navigate('/login')}
+                    className="text-sm font-medium text-white hover:text-blue-100 transition-colors"
+                  >
+                    Log In
+                  </button>
+                  <button
+                    onClick={() => navigate('/signup')}
+                    className="px-5 py-2 rounded-full bg-white text-blue-600 text-sm font-bold shadow-md hover:bg-blue-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                  >
+                    Sign Up
+                  </button>
+                </>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <div className="text-right hidden xl:block">
+                    <div className="text-xs text-blue-200">Welcome,</div>
+                    <div className="text-sm font-medium text-white leading-none">{user.displayName || 'User'}</div>
+                  </div>
+                  <button
+                    onClick={logout}
+                    className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                    title="Logout"
+                  >
+                    <LogOut className="h-5 w-5" />
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="inline-flex items-center justify-center p-2 rounded-md text-blue-100 hover:text-white hover:bg-white/10 focus:outline-none"
+              >
+                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden bg-indigo-800 border-t border-indigo-700">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.name}
+                to={link.path}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `block px-3 py-2 rounded-md text-base font-medium ${isActive
+                    ? 'bg-indigo-900 text-white'
+                    : 'text-indigo-200 hover:bg-indigo-700 hover:text-white'
+                  }`
+                }
+              >
+                {link.name}
+              </NavLink>
+            ))}
+            {!user && (
+              <div className="mt-4 pt-4 border-t border-indigo-700 flex flex-col gap-2 p-2">
+                <button onClick={() => { navigate('/login'); setIsOpen(false) }} className="w-full text-center py-2 text-white font-medium hover:bg-indigo-700 rounded-md">Log In</button>
+                <button onClick={() => { navigate('/signup'); setIsOpen(false) }} className="w-full text-center py-2 bg-white text-indigo-600 font-bold rounded-md">Sign Up</button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </nav>
   );
 };
 
