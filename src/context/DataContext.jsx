@@ -1,7 +1,18 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { db } from '../db/vajraDB';
 
-const DataContext = createContext();
+const DataContext = createContext({
+    products: [],
+    orders: [],
+    returns: [],
+    customers: [],
+    orderItems: [],
+    loading: true,
+    dataStatus: 'idle',
+    error: null,
+    syncProgress: 0,
+    db: null
+});
 
 export const useData = () => {
     return useContext(DataContext);

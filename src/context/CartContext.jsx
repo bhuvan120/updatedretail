@@ -1,6 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const CartContext = createContext();
+const CartContext = createContext({
+    cartItems: [],
+    addToCart: () => { },
+    removeFromCart: () => { },
+    updateQuantity: () => { },
+    clearCart: () => { },
+    toggleCart: () => { },
+    cartTotal: 0,
+    cartCount: 0
+});
 
 export const useCart = () => {
     return useContext(CartContext);

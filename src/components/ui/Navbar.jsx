@@ -17,12 +17,12 @@ import './Navbar.css';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
-  const { cart } = useCart();
+  const { cartItems: cart } = useCart(); // Destructure cartItems and alias to cart
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Calculate cart item count
-  const cartCount = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+  // Calculate cart item count (Defensive check: cart || [])
+  const cartCount = (cart || []).reduce((total, item) => total + (item.quantity || 1), 0);
 
   const navLinks = [
     { name: "Home", path: "/" },
