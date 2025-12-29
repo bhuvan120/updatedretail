@@ -12,7 +12,10 @@ import {
   Truck,
   ShieldCheck,
   RotateCcw,
-  Sparkles
+  Sparkles,
+  Users,
+  Star,
+  User
 } from 'lucide-react';
 
 const Home = () => {
@@ -54,7 +57,7 @@ const Home = () => {
   ];
 
   return (
-    <div className="bg-slate-50 min-h-screen font-sans">
+    <div className="bg-pink-200 min-h-screen font-sans">
 
       {/* HERO SECTION */}
       <section className="relative h-[650px] overflow-hidden flex items-center">
@@ -135,6 +138,14 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* WRAPPED SECTIONS - subtle textured background */}
+      <div className="relative overflow-hidden">
+        {/* Subtle textured background image (low opacity) */}
+        <div
+          className="absolute inset-0 -z-10 bg-center bg-cover opacity-10 pointer-events-none"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?auto=format&fit=crop&w=1600&q=60')" }}
+        />
 
       {/* FEATURED PRODUCTS */}
       <section className="py-24 bg-white">
@@ -217,6 +228,154 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* BRAND STORY */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl lg:text-4xl font-bold text-slate-900 mb-4">About Our Brand</h2>
+          <p className="text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            We are a modern retail brand focused on quality products, affordability, and customer satisfaction. Trusted by thousands of customers, we craft a shopping experience that delivers value, style, and peace of mind.
+          </p>
+        </div>
+      </section>
+
+      {/* WHY CHOOSE US */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-slate-900">Why Choose Us</h3>
+            <p className="text-slate-500">Shop with confidence — here’s why customers trust us</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="p-6 bg-white rounded-2xl shadow-sm flex flex-col items-start gap-4">
+              <div className="p-3 bg-blue-50 rounded-lg text-blue-600">
+                <Star size={24} />
+              </div>
+              <h4 className="font-semibold text-slate-900">Premium Quality Products</h4>
+              <p className="text-sm text-slate-500">Carefully curated selection with strict quality standards.</p>
+            </div>
+            <div className="p-6 bg-white rounded-2xl shadow-sm flex flex-col items-start gap-4">
+              <div className="p-3 bg-emerald-50 rounded-lg text-emerald-600">
+                <ShieldCheck size={24} />
+              </div>
+              <h4 className="font-semibold text-slate-900">Secure Payments</h4>
+              <p className="text-sm text-slate-500">Safe & encrypted checkout for every purchase.</p>
+            </div>
+            <div className="p-6 bg-white rounded-2xl shadow-sm flex flex-col items-start gap-4">
+              <div className="p-3 bg-amber-50 rounded-lg text-amber-600">
+                <Truck size={24} />
+              </div>
+              <h4 className="font-semibold text-slate-900">Fast & Reliable Delivery</h4>
+              <p className="text-sm text-slate-500">Timely shipments with careful handling.</p>
+            </div>
+            <div className="p-6 bg-white rounded-2xl shadow-sm flex flex-col items-start gap-4">
+              <div className="p-3 bg-purple-50 rounded-lg text-purple-600">
+                <RotateCcw size={24} />
+              </div>
+              <h4 className="font-semibold text-slate-900">Easy Returns & Support</h4>
+              <p className="text-sm text-slate-500">Hassle-free returns and friendly customer service.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* STATS / TRUST */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
+            <div className="p-6">
+              <div className="mx-auto w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 mb-3">
+                <Users size={20} />
+              </div>
+              <div className="text-2xl font-bold text-slate-900">10,000+</div>
+              <div className="text-sm text-slate-500">Happy Customers</div>
+            </div>
+            <div className="p-6">
+              <div className="mx-auto w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600 mb-3">
+                <ShoppingBag size={20} />
+              </div>
+              <div className="text-2xl font-bold text-slate-900">1,000+</div>
+              <div className="text-sm text-slate-500">Products</div>
+            </div>
+            <div className="p-6">
+              <div className="mx-auto w-12 h-12 bg-amber-50 rounded-full flex items-center justify-center text-amber-600 mb-3">
+                <Truck size={20} />
+              </div>
+              <div className="text-2xl font-bold text-slate-900">500+</div>
+              <div className="text-sm text-slate-500">Orders Delivered Monthly</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-20 bg-slate-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h3 className="text-3xl font-bold text-slate-900">What Our Customers Say</h3>
+            <p className="text-slate-500">Real feedback from happy shoppers</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 bg-white rounded-2xl shadow-sm">
+              <div className="flex items-center gap-4 mb-3">
+                <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                  <User size={20} />
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900">Asha R.</div>
+                  <div className="text-sm text-slate-500">Verified Buyer</div>
+                </div>
+              </div>
+              <p className="text-slate-600">"Great product quality and fast delivery — exceeded my expectations."</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-2xl shadow-sm">
+              <div className="flex items-center gap-4 mb-3">
+                <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center text-emerald-600">
+                  <User size={20} />
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900">Rahul M.</div>
+                  <div className="text-sm text-slate-500">Verified Buyer</div>
+                </div>
+              </div>
+              <p className="text-slate-600">"Excellent customer service and easy returns — very satisfied."</p>
+            </div>
+
+            <div className="p-6 bg-white rounded-2xl shadow-sm">
+              <div className="flex items-center gap-4 mb-3">
+                <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center text-amber-600">
+                  <User size={20} />
+                </div>
+                <div>
+                  <div className="font-semibold text-slate-900">Priya S.</div>
+                  <div className="text-sm text-slate-500">Verified Buyer</div>
+                </div>
+              </div>
+              <p className="text-slate-600">"Affordable prices without compromising on quality."</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <h3 className="text-3xl font-bold">Start shopping with confidence today</h3>
+            <p className="text-slate-200 mt-2">Discover quality, value, and support with every purchase.</p>
+          </div>
+          <div>
+            <button
+              onClick={() => navigate('/productscard')}
+              className="px-6 py-3 bg-white text-blue-600 rounded-full font-semibold hover:scale-105 transition-transform shadow-lg"
+            >
+              Shop Now
+            </button>
+          </div>
+        </div>
+      </section>
+      </div>
 
     </div>
   );

@@ -11,6 +11,7 @@ import Signup from "./pages/Signup";
 import ResetPassword from "./pages/ResetPassword";
 import PageNotFound from "./pages/PageNotFound";
 import Products from "./pages/ProductsCard";
+import Cart from "./pages/Cart";
 
 /* Context Providers */
 import { DataProvider } from "./context/DataContext";
@@ -56,6 +57,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/productscard" element={<Products />} />
+        <Route path="/cart" element={<Cart />} />
       </Route>
 
       {/* ===== USER DASHBOARD (NO PUBLIC NAVBAR) ===== */}
