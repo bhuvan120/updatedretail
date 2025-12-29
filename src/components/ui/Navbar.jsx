@@ -31,9 +31,6 @@ const Navbar = () => {
   // Calculate cart item count (Defensive check: cart || [])
   const cartCount = (cart || []).reduce((total, item) => total + (item.quantity || 1), 0);
 
-  // Calculate cart item count (Defensive check: cart || [])
-  const cartCount = (cart || []).reduce((total, item) => total + (item.quantity || 1), 0);
-
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Products", path: "/productscard" },
@@ -63,10 +60,6 @@ const Navbar = () => {
     window.addEventListener('click', handleClick);
     return () => window.removeEventListener('click', handleClick);
   }, []);
-
-  const isActiveLink = (path) => {
-    return location.pathname === path;
-  };
 
   const isActiveLink = (path) => {
     return location.pathname === path;
