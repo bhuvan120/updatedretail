@@ -12,6 +12,16 @@ const ProductCard = ({ product, isAdded, onAdd }) => {
     return (
         <div className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow duration-200 flex flex-col h-full group relative overflow-hidden">
 
+            {/* Product image (uses product.image URL if provided) */}
+            <div className="w-full h-44 md:h-48 rounded-t-xl overflow-hidden">
+                <img
+                    src={product.image || 'https://i.pinimg.com/1200x/04/4b/22/044b228a83b5e3bbdb6e7f519f2b0cad.jpg'}
+                    alt={product.product_name}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                />
+            </div>
+
             {/* Top Bar showing Status */}
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 

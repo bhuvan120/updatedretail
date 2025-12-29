@@ -9,6 +9,7 @@ import {
   LogOut,
   ChevronDown
 } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import SearchInput from './SearchInput';
@@ -21,6 +22,15 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Local UI state
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [isOpenSearchMobile, setIsOpenSearchMobile] = useState(false);
+  const [cartPulse, setCartPulse] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Calculate cart item count (Defensive check: cart || [])
+  const cartCount = (cart || []).reduce((total, item) => total + (item.quantity || 1), 0);
+
   // Calculate cart item count (Defensive check: cart || [])
   const cartCount = (cart || []).reduce((total, item) => total + (item.quantity || 1), 0);
 
@@ -30,6 +40,33 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Contact", path: "/contact" },
   ];
+
+  useEffect(() => {
+    // Pulse animation when cart count increases
+    let prev = 0;
+    const current = cartCount;
+    if (current > prev) {
+      setCartPulse(true);
+      const t = setTimeout(() => setCartPulse(false), 900);
+      return () => clearTimeout(t);
+    }
+    prev = current;
+  }, [cartCount]);
+
+  // Close dropdown when clicked outside
+  useEffect(() => {
+    function handleClick(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setShowDropdown(false);
+      }
+    }
+    window.addEventListener('click', handleClick);
+    return () => window.removeEventListener('click', handleClick);
+  }, []);
+
+  const isActiveLink = (path) => {
+    return location.pathname === path;
+  };
 
   const isActiveLink = (path) => {
     return location.pathname === path;
@@ -86,14 +123,20 @@ const Navbar = () => {
           {/* Right: Cart & Auth */}
           <div className="flex items-center gap-4">
             {/* Mobile Search Toggle (Visible only on small screens) */}
-            <button className="lg:hidden p-2 text-white/80 hover:text-white">
+            <button
+              onClick={() => setIsOpenSearchMobile(s => !s)}
+              aria-expanded={isOpenSearchMobile}
+              className="lg:hidden p-2 text-white/80 hover:text-white"
+              title="Search"
+            >
               <Search className="h-6 w-6" />
             </button>
 
             {/* Cart */}
             <button
-              onClick={() => navigate('/cart')} // Assuming you have a cart route or drawer trigger
-              className="relative p-2 text-blue-50 hover:text-white transition-colors group"
+              onClick={() => navigate('/cart')}
+              className={`relative p-2 text-blue-50 hover:text-white transition-colors group ${cartPulse ? 'cart-pulse' : ''}`}
+              aria-label={`View cart, ${cartCount} item(s)`}
             >
               <ShoppingBag className="h-6 w-6 group-hover:scale-105 transition-transform" />
               {cartCount > 0 && (
@@ -104,7 +147,7 @@ const Navbar = () => {
             </button>
 
             {/* Auth Buttons (Desktop) */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-3 relative" ref={dropdownRef}>
               {!user ? (
                 <>
                   <button
@@ -122,17 +165,29 @@ const Navbar = () => {
                 </>
               ) : (
                 <div className="flex items-center gap-3">
-                  <div className="text-right hidden xl:block">
-                    <div className="text-xs text-blue-200">Welcome,</div>
-                    <div className="text-sm font-medium text-white leading-none">{user.displayName || 'User'}</div>
-                  </div>
                   <button
-                    onClick={logout}
-                    className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
-                    title="Logout"
+                    onClick={() => setShowDropdown(s => !s)}
+                    className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/30"
+                    aria-expanded={showDropdown}
+                    aria-haspopup="true"
+                    title="Account"
                   >
-                    <LogOut className="h-5 w-5" />
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white font-semibold">{(user.displayName || 'U').slice(0,1)}</div>
+                    <div className="text-left hidden xl:block">
+                      <div className="text-xs text-blue-200">Welcome,</div>
+                      <div className="text-sm font-medium text-white leading-none">{user.displayName || 'User'}</div>
+                    </div>
+                    <ChevronDown className="h-4 w-4 text-white hidden xl:block" />
                   </button>
+
+                  {/* Dropdown */}
+                  {showDropdown && (
+                    <div className="dropdown-menu absolute right-0 mt-3 w-44 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 overflow-hidden animate-fade-slide z-50">
+                      <button className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" onClick={() => { navigate('/profile'); setShowDropdown(false); }}>Profile</button>
+                      <button className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50" onClick={() => { navigate('/orders'); setShowDropdown(false); }}>Orders</button>
+                      <button className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-slate-50" onClick={() => { logout(); setShowDropdown(false); }}>Logout</button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -149,6 +204,25 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Search Input (collapsible) */}
+      {isOpenSearchMobile && (
+        <div className="md:hidden px-4 pb-3 bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-600">
+          <div className="mt-2">
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-4 w-4 text-white/80" />
+              </div>
+              <input
+                aria-label="Search products"
+                type="text"
+                placeholder="Search products, brands, categories..."
+                className="block w-full pl-10 pr-4 py-2.5 rounded-full border-0 bg-white/10 text-white placeholder-white/80 focus:ring-2 focus:ring-white/40 focus:outline-none transition-shadow"
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Mobile Menu */}
       {isOpen && (

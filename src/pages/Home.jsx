@@ -49,13 +49,36 @@ const Home = () => {
     }, 2000);
   };
 
-  const categories = [
-    { name: "Accessories", icon: Watch, gradient: "from-blue-50 to-indigo-50", iconColor: "text-blue-600" },
-    { name: "Apparel", icon: Shirt, gradient: "from-purple-50 to-pink-50", iconColor: "text-purple-600" },
-    { name: "Footwear", icon: Footprints, gradient: "from-emerald-50 to-teal-50", iconColor: "text-emerald-600" },
-    { name: "Essentials", icon: ShoppingBag, gradient: "from-amber-50 to-orange-50", iconColor: "text-amber-600" }
-  ];
-
+const categories = [
+  {
+    name: "Accessories",
+    icon: Watch,
+    image: "https://img.freepik.com/premium-photo/essentials-fashion-apparel-footwear-accessories_818261-13345.jpg?w=2000", // <- put your URL here
+    gradient: "from-blue-50 to-indigo-50",
+    iconColor: "text-blue-600"
+  },
+  {
+    name: "Apparel",
+    icon: Shirt,
+    image: "https://i.pinimg.com/736x/a1/42/b5/a142b5b7a06b7bfa74fe43794cebe12c.jpg",
+    gradient: "from-purple-50 to-pink-50",
+    iconColor: "text-purple-600"
+  },
+  {
+    name: "Footwear",
+    icon: Footprints,
+    image: "https://i.pinimg.com/1200x/98/d1/9b/98d19b753c86339f1225fde95694a04a.jpg",
+    gradient: "from-emerald-50 to-teal-50",
+    iconColor: "text-emerald-600"
+  },
+  {
+    name: "Essentials",
+    icon: ShoppingBag,
+    image: "https://i.pinimg.com/1200x/cb/0c/2e/cb0c2e226c35da8ec459bb9e8c078aca.jpg",
+    gradient: "from-amber-50 to-orange-50",
+    iconColor: "text-amber-600"
+  }
+];
   return (
     <div className="bg-pink-200 min-h-screen font-sans">
 
@@ -123,7 +146,14 @@ const Home = () => {
                 onClick={() => navigate('/productscard')}
                 className={`group cursor-pointer relative p-8 rounded-3xl bg-gradient-to-br ${cat.gradient} border border-white shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-2 transition-all duration-300 flex flex-col items-center justify-center gap-6 text-center overflow-hidden`}
               >
-                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
+                  {cat.image && (
+                  <div className="absolute inset-0 z-0 pointer-events-none">
+                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover opacity-30" loading="lazy" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent to-white/30"></div>
+                  </div>
+                )}
+
+                <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity relative z-10">
                   <cat.icon size={120} />
                 </div>
 
